@@ -3,7 +3,7 @@ const imageProvider = require('./imageProvider');
 
 imageProvider.initialize();
 
-const r = repl.start({
+const replServer = repl.start({
     prompt: 'Enter search term> ',
     eval: eval
 });
@@ -29,5 +29,5 @@ function search(searchTerm) {
         console.log('No results.');
     }
 
-    console.log('Press enter to continue..');
+    replServer.displayPrompt();
 }
