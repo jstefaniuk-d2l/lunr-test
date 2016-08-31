@@ -13,7 +13,7 @@ function eval(searchTerm) {
 };
 
 function search(searchTerm) {
-    var results = imageProvider.search(searchTerm);
+    var results = imageProvider.search('en', searchTerm);
     
     if(results && results.length > 0) {
         console.log('Results for "' + searchTerm + '":\n');

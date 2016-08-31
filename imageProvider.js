@@ -1,15 +1,25 @@
 (function() {
     var lunr = require('lunr');
+    require('lunr-languages/lunr.stemmer.support.js')(lunr);
+    require('lunr-languages/lunr.fr.js')(lunr);
 
     /*
     *   Define index data for LUNR 
     *   field: Searchable field
     *   ref: The value returned in a search to reference it to the found data
     */
-    var index = lunr(function () {
-        this.ref('imageId')
-        this.field('tags')
-    })
+    var indexes = {
+        en: lunr(function () {
+            this.ref('imageId')
+            this.field('tags_en')
+        }),
+
+        fr: lunr(function () {
+            this.use(lunr.fr);
+            this.ref('imageId')
+            this.field('tags_fr')
+        })
+    }
 
     /*
     * Array of objects containing our searchable/retrievable data
@@ -17,12 +27,14 @@
     var images = [
         {
             imageId: 0,
-            tags: ['star', 'astronomy', 'constellation', 'space'],
+            tags_en: ['star', 'astronomy', 'constellation', 'space'],
+            tags_fr: ['étoile', 'astronomie', 'cosmos'],
             extraField: 'should not search (or break)!'
         }, 
         {
             imageId: 1,
-            tags: ['nature', 'trees', 'landscape']
+            tags_en: ['nature', 'trees', 'landscape'],
+            tags_fr: ['la nature', 'arbre', 'paysage']
         }
     ];
 
@@ -31,7 +43,8 @@
     */
     var initialize = function() {
         for(var i = 0; i < images.length; i++) {
-            index.add(images[i]);
+            indexes.en.add(images[i]);
+            indexes.fr.add(images[i]);
         }
     };
 
@@ -45,8 +58,8 @@
     /* 
     * Simple wrapper to create a consistent interface
     */
-    var search = function(searchTerm) {
-        return index.search(searchTerm);
+    var search = function(language, searchTerm) {
+        return indexes[language].search(searchTerm);
     }
 
     module.exports = {
