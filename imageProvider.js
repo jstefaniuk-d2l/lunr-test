@@ -1,5 +1,5 @@
 (function() {
-    var lunr = require('lunr');
+    var lunr = require('elasticlunr');
 
     /*
     *   Define index data for LUNR 
@@ -7,8 +7,8 @@
     *   ref: The value returned in a search to reference it to the found data
     */
     var index = lunr(function () {
-        this.ref('imageId')
-        this.field('tags')
+        this.setRef('imageId');
+        this.addField('tags')
     })
 
     /*
@@ -31,7 +31,7 @@
     */
     var initialize = function() {
         for(var i = 0; i < images.length; i++) {
-            index.add(images[i]);
+            index.addDoc(images[i]);
         }
     };
 
